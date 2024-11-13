@@ -1,15 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
 import Addtodo from './Test/addtodo';
-import { Route, Routes } from 'react-router-dom';
+
+import Todolist from './Test/todolist';
 
 function App() {
   return (
     <div className="App">
-      <Routes>
-      <Route path="/addtodo"  element={<Addtodo/>}></Route>
-
-      </Routes>
+      <Addtodo></Addtodo>
+      <Todolist></Todolist>
+      
       
     </div>
   );

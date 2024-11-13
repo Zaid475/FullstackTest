@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import { toast } from 'react-hot-toast';
 import api from "./axiosconfig";
+import { datacontext } from './context';
 
 const Addtodo = () => {
+    const{state,dispatch}=useContext(datacontext)
     
 
     const [singledata, updateddata] = useState("")//state to store user task
@@ -17,18 +19,38 @@ const Addtodo = () => {
         event.preventDefault()
         
         try {
-            const response = await api.post("/addtodo", {Userdata: {task: singledata}})
+            const response = await api.post("/addtodo",{task:singledata})
             if (response.data.success) {
                 toast.success(response.data.message)
-                singledata("")
+                updateddata("")
+                gettodos();
             }
 
 
         }
         catch (error) {
-            toast.error(error)
+            toast.error(error.response?.data?.message)
         }
     }
+    const gettodos=async()=>{
+        try{
+            const response=await api.get("/todos")
+            console.log("response from back",response.data)
+            if(response.data.success){
+                console.log("dispatching todos",response.data.todoexists)
+                dispatch({type:"todos",payload:response.data.todoexists})
+                
+            }
+        }
+        catch(error){
+
+        }
+
+    }
+
+    useEffect(()=>{
+        gettodos()
+    },[])
 
 
     return (
